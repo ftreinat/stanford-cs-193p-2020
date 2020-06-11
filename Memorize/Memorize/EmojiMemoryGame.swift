@@ -8,11 +8,12 @@
 
 import Foundation
 
-class EmojiMemoryGame {
-    private(set) var game = createMemoryGame()
+class EmojiMemoryGame: ObservableObject {
+    @Published private(set) var game = createMemoryGame()
     
-    static let emojis: Array<String> = ["🥜", "🥥"]
-    
+//    static let emojis: Array<String> = ["🥜", "🥥", "🌯", "🥑", "🍌"]
+    static let emojis: Array<String> = ["🥜", "🥥", "🥑"]
+
     static func createMemoryGame() -> MemoryGame<String> {
         return MemoryGame<String>(numberOfPairsOfCards: emojis.count) { pairIndex in
             return emojis[pairIndex]
@@ -27,6 +28,7 @@ class EmojiMemoryGame {
     // MARK: - Intent(s)
     
     func choose(card: MemoryGame<String>.Card) {
+        objectWillChange.send()
         game.choose(card: card)
     }
 }
