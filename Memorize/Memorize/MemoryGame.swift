@@ -13,11 +13,17 @@ struct MemoryGame<CardContent> {
     
     init(numberOfPairsOfCards: Int, cardContentFactory: (Int) -> CardContent) {
         cards = Array()
-        for pairIndex in 0..<numberOfPairsOfCards {
+        var randomizer = SystemRandomNumberGenerator()
+        
+        let numberOfPairsOfCardsShuffeld = Int.random(in: 1..<numberOfPairsOfCards, using: &randomizer)
+        for pairIndex in 0..<numberOfPairsOfCardsShuffeld {
             let content = cardContentFactory(pairIndex)
             cards.append(Card(id: pairIndex*2, content: content))
             cards.append(Card(id: pairIndex*2+1, content: content))
         }
+        
+        cards.shuffle(using: &randomizer)
+        
     }
     
     //mutating keyword because of changing the card inside our cards Array

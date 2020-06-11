@@ -11,8 +11,7 @@ import Foundation
 class EmojiMemoryGame: ObservableObject {
     @Published private(set) var game = createMemoryGame()
     
-//    static let emojis: Array<String> = ["🥜", "🥥", "🌯", "🥑", "🍌"]
-    static let emojis: Array<String> = ["🥜", "🥥", "🥑"]
+    static let emojis: Array<String> = ["🥜", "🥥", "🌯", "🥑", "🍌"]
 
     static func createMemoryGame() -> MemoryGame<String> {
         return MemoryGame<String>(numberOfPairsOfCards: emojis.count) { pairIndex in
