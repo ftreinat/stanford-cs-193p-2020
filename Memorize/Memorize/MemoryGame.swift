@@ -8,14 +8,23 @@
 
 import Foundation
 
-struct MemoryGame<CardContent> {
+struct MemoryGame<CardContent> where CardContent: Equatable {
     var cards: Array<Card>
+    
+    var indexOfTheOneAndOnlyFaceUpCard: Int? {
+        get { cards.indices.filter { cards[$0].isFaceUp }.only }
+        set {
+            for index in cards.indices {
+                cards[index].isFaceUp = index == newValue
+            }
+        }
+    }
     
     init(numberOfPairsOfCards: Int, cardContentFactory: (Int) -> CardContent) {
         cards = Array()
         var randomizer = SystemRandomNumberGenerator()
         
-        let numberOfPairsOfCardsShuffeld = Int.random(in: 1..<numberOfPairsOfCards, using: &randomizer)
+        let numberOfPairsOfCardsShuffeld = Int.random(in: 3..<numberOfPairsOfCards, using: &randomizer)
         for pairIndex in 0..<numberOfPairsOfCardsShuffeld {
             let content = cardContentFactory(pairIndex)
             cards.append(Card(id: pairIndex*2, content: content))
@@ -23,29 +32,31 @@ struct MemoryGame<CardContent> {
         }
         
         cards.shuffle(using: &randomizer)
-        
     }
     
     //mutating keyword because of changing the card inside our cards Array
     mutating func choose(card: Card) {
         print("card chosen: \(card)")
-        if let chosenIndex: Int = index(of: card) {
-            cards[chosenIndex].isFaceUp = !cards[chosenIndex].isFaceUp
-        }
-    }
-    
-    func index(of card: Card) -> Int? {
-        for index in 0..<cards.count {
-            if cards[index].id == card.id {
-                return index
+        if let chosenIndex: Int = cards.firstIndex(matching: card), !cards[chosenIndex].isFaceUp, !cards[chosenIndex].isMatched {
+            
+            if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
+                if cards[chosenIndex].content == cards[potentialMatchIndex].content {
+                    cards[chosenIndex].isMatched = true
+                    cards[potentialMatchIndex].isMatched = true
+                }
+                
+                cards[chosenIndex].isFaceUp = true
+                
+            } else {
+//          Umdrehen der Karten wird von der computed Property erledigt
+                indexOfTheOneAndOnlyFaceUpCard = chosenIndex
             }
         }
-        return nil
     }
     
     struct Card: Identifiable {
         var id: Int
-        var isFaceUp: Bool = true
+        var isFaceUp: Bool = false
         var isMatched: Bool = false
         var content: CardContent
     }
