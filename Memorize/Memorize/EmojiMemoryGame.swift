@@ -11,11 +11,19 @@ import Foundation
 class EmojiMemoryGame: ObservableObject {
     @Published private(set) var game = createMemoryGame()
     
-    static let emojis: Array<String> = ["🥜", "🥥", "🌯", "🥑", "🍌"]
+    static let themes: [EmojiTheme] = [
+        EmojiTheme(name: "Food", emojis: ["🥜", "🥥", "🌯", "🥑", "🍌"], color: .green),
+        EmojiTheme(name: "Animals", emojis: ["🐌", "🦖", "🦆", "🐝", "🦋"], color: .blue),
+        EmojiTheme(name: "Sports", emojis: ["⚽️", "🏓", "🏀", "🏈", "🤾🏻‍♀️", "🏌🏻‍♂️", "🥋", "🏹"], color: .red),
+        EmojiTheme(name: "Halloween", emojis: ["🎃", "🕷", "🍎", "🍭", "👻" ], color: .orange)
+    ]
 
+    static var theme = chooseRandomEmojiTheme()
+    
     static func createMemoryGame() -> MemoryGame<String> {
-        return MemoryGame<String>(numberOfPairsOfCards: emojis.count) { pairIndex in
-            return emojis[pairIndex]
+        EmojiMemoryGame.theme = chooseRandomEmojiTheme()
+        return MemoryGame<String>(numberOfPairsOfCards: EmojiMemoryGame.theme.emojis.count) { pairIndex in
+            return EmojiMemoryGame.theme.emojis[pairIndex]
         }
     }
     
@@ -24,10 +32,41 @@ class EmojiMemoryGame: ObservableObject {
         return game.cards
     }
     
+    var themecolor: ThemeColor {
+        return EmojiMemoryGame.theme.color
+    }
+    
+    var themename: String {
+        return EmojiMemoryGame.theme.name
+    }
+    
+    var points: Int {
+        return game.score
+    }
+    
     // MARK: - Intent(s)
     
     func choose(card: MemoryGame<String>.Card) {
         objectWillChange.send()
         game.choose(card: card)
     }
+    
+    func startNewGame() {
+        game = EmojiMemoryGame.createMemoryGame()
+    }
+    
+    static func chooseRandomEmojiTheme() -> EmojiTheme {
+        return EmojiMemoryGame.themes.randomElement()!
+    }
+    
+}
+
+struct EmojiTheme {
+    var name: String
+    var emojis: [String]
+    var color: ThemeColor
+}
+
+enum ThemeColor {
+    case green, red, blue, orange
 }
