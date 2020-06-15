@@ -9,11 +9,11 @@
 import Foundation
 
 struct MemoryGame<CardContent> where CardContent: Equatable {
-    var cards: Array<Card>
-    var score = 0
-    var alreadySeenCards: Set<Int> = Set()
+    private(set) var cards: Array<Card>
+    private(set) var score = 0
+    private var alreadySeenCards: Set<Int> = Set()
     
-    var indexOfTheOneAndOnlyFaceUpCard: Int? {
+    private var indexOfTheOneAndOnlyFaceUpCard: Int? {
         get { cards.indices.filter { cards[$0].isFaceUp }.only }
         set {
             for index in cards.indices {
@@ -61,13 +61,13 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         }
     }
     
-    func calculatePointsForMismatch(firstCardIndex first: Int, secondCardIndex second: Int) -> Int {
+    private func calculatePointsForMismatch(firstCardIndex first: Int, secondCardIndex second: Int) -> Int {
         var penalty = alreadySeenCards.contains(first) ? GamePoints.mismatch.rawValue : 0
         penalty += alreadySeenCards.contains(second) ? GamePoints.mismatch.rawValue : 0
         return penalty
     }
     
-    enum GamePoints: Int {
+    private enum GamePoints: Int {
         case match = 2,
              mismatch = -1
     }
