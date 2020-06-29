@@ -19,10 +19,11 @@ class ShapeSetGame : ObservableObject {
     }
     
     var cards: [SetGameWithShapes.SetCard] {
-        game.openCards
+        game.cardsOnField
     }
     
     func select(card: SetGameCard) {
+        objectWillChange.send()
         game.select(card: card)
     }
     
