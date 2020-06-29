@@ -54,10 +54,11 @@ struct CardView: View {
     }
     
     func determineBorderColorFor(_ card: SetGameCard) -> Color {
-        if let isMatched = card.isMatched {
-            return isMatched ? Color.green : Color.red
-        }
-        else if card.isSelected {
+        if card.isPartOfAMatch {
+            return Color.green
+        } else if card.isPartOfAMismatch {
+            return Color.red
+        } else if card.isSelected {
             return Color.yellow
         } else {
             return Color.black

@@ -22,11 +22,31 @@ class ShapeSetGame : ObservableObject {
         game.cardsOnField
     }
     
+    var cheat: Bool {
+        get {
+            self.game.cheat
+        }
+        set {
+            self.game.cheat = newValue
+        }
+    }
+    
+    var isDeckEmpty: Bool {
+        game.carddeck.isEmpty
+    }
+    
     func select(card: SetGameCard) {
-        objectWillChange.send()
         game.select(card: card)
     }
     
+    func reset() {
+        game = ShapeSetGame.createSetGame()
+    }
+    
+    func drawCards() {
+        game.drawCards()
+    }
+        
     enum Color: CaseIterable {
         case green
         case red

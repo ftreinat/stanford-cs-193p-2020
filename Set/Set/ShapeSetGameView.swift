@@ -12,13 +12,36 @@ struct ShapeSetGameView: View {
     @ObservedObject var shapeSetGame = ShapeSetGame()
     
     var body: some View {
-        Grid(items: shapeSetGame.cards) { card in
-            CardView(card: card)
-                .onTapGesture {
-                    self.shapeSetGame.select(card: card)
+        VStack {
+            Grid(items: shapeSetGame.cards) { card in
+                CardView(card: card)
+                    .onTapGesture {
+                        self.shapeSetGame.select(card: card)
+                }
             }
+            .padding()
+            self.bottomRow()
+                .padding(.top, 3)
         }
-        .padding()
+    }
+    
+    func bottomRow() -> some View {
+        HStack {
+            Spacer()
+            Text("Cheat")
+                .onTapGesture { self.shapeSetGame.cheat.toggle() }
+                .font(self.shapeSetGame.cheat ? Font.body.bold() : Font.body)
+            Spacer()
+            Button("Draw Cards") {
+                self.shapeSetGame.drawCards()
+            }
+                .disabled(self.shapeSetGame.isDeckEmpty)
+            Spacer()
+            Button("Reset") {
+                self.shapeSetGame.reset()
+            }
+            Spacer()
+        }
     }
 }
 

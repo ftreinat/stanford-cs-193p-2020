@@ -16,14 +16,10 @@ struct SetGame<Type, Number, Shading, Color> where
     Color: CaseIterable, Color:  Hashable {
     
     typealias SetCard = Card<Type, Number, Shading, Color>
-    var carddeck: [SetCard] {
-        didSet {
-            print("Wuride geändert")
-            drawNewDeck = true
-        }
-    }
-    var cardsOnField: [SetCard]
-    let numberOfPlayingCards = 15
+    private(set) var carddeck: [SetCard]
+    private(set) var cardsOnField: [SetCard]
+    var cheat: Bool = false 
+    private let numberOfPlayingCards = 12
     
     var numberOfSelectedCards : Int {
         return cardsOnField.filter {
@@ -46,32 +42,21 @@ struct SetGame<Type, Number, Shading, Color> where
                 }
             }
         }
+
         carddeck.shuffle()
-        drawInitialCards()
-        //cardsOnField.append(contentsOf: carddeck[0..<numberOfPlayingCards])
-    }
-    
-    mutating func drawInitialCards() {
         for index in 0..<numberOfPlayingCards {
             cardsOnField.insert(carddeck.remove(at: index), at: index)
         }
     }
     
     var selectedCardsAreASet: Bool {
-        // hier drin alle selektierten Karten auf isMatched prüfen
-        let selectedCards = cardsOnField.filter({ $0.isSelected })
-        
-        if selectedCards.count != 3 {
-            return false
-        } else {
-            return selectedCards.map({ $0.isMatched }).reduce(true, { (result: Bool,current: Bool?) in
-            result && (current ?? false) })
-        }
+        cardsOnField.filter({ $0.isSelected }).filter({ $0.matchState == SetCard.MatchState.match }).count == 3
     }
         
     mutating func select(card: SetCard) {
         if let indexOfCard = cardsOnField.firstIndex(matching: card) {
             
+            // wenn zu Beginn 3 Karten selektiert waren -> 4. selektiert
             if numberOfSelectedCards == 3 {
                 
                 let indicesOfSelectedCards = cardsOnField.indices.filter { (index) in  cardsOnField[index].isSelected }
@@ -80,15 +65,10 @@ struct SetGame<Type, Number, Shading, Color> where
                 let indexOfThirdCard = indicesOfSelectedCards[2]
 
                 if selectedCardsAreASet {
-                    cardsOnField[indexOfFirstCard].isSelected = false
-                           cardsOnField[indexOfSecondCard].isSelected = false
-                           cardsOnField[indexOfThirdCard].isSelected = false
-                    
                 //neue Karten
                     for cardindex in [indexOfFirstCard, indexOfSecondCard, indexOfThirdCard] {
                         if !carddeck.isEmpty {
-                            let newCard = carddeck.remove(at: 0)
-                            cardsOnField.insert(newCard, at: cardindex)
+                            cardsOnField[cardindex] = carddeck.remove(at: 0)
                             print("Neue Card")
                         } else {
                             cardsOnField.remove(at: cardindex)
@@ -96,26 +76,18 @@ struct SetGame<Type, Number, Shading, Color> where
                    }
                 } else {
                     cardsOnField[indexOfFirstCard].isSelected = false
-                           cardsOnField[indexOfSecondCard].isSelected = false
-                           cardsOnField[indexOfThirdCard].isSelected = false
+                    cardsOnField[indexOfSecondCard].isSelected = false
+                    cardsOnField[indexOfThirdCard].isSelected = false
                     
+                    cardsOnField[indexOfFirstCard].matchState = .none
+                    cardsOnField[indexOfSecondCard].matchState = .none
+                    cardsOnField[indexOfThirdCard].matchState = .none
                     print("Falsches set reseted")
-                    cardsOnField[indexOfFirstCard].isMatched = nil
-                    cardsOnField[indexOfSecondCard].isMatched = nil
-                    cardsOnField[indexOfThirdCard].isMatched = nil
                 }
                 
-            } else {
-                //keiner oder bis zu 2 selektierte Karten
             }
                 
-            // 1: < 3 selektiert -> Selektiere Karte
-                // 1.1 sind nun 3 selektiert? - Prüfe auf Set
-                // 1.2 sind weiterhin < 3 selektiert -> mache nix
-            // 2: 3 Selektiert:
-                // 2.1 : Karte aus Set selektiert
-                // 2.2 : Karte außerhalb Set selektiert
-            
+            // select the card
             cardsOnField[indexOfCard].isSelected.toggle()
                         
             if numberOfSelectedCards == 3 {
@@ -129,29 +101,41 @@ struct SetGame<Type, Number, Shading, Color> where
                 let secondCard = cardsOnField[indexOfSecondCard]
                 let thirdCard = cardsOnField[indexOfThirdCard]
                 
-                if attributesAreASet(first: firstCard.type , second: secondCard.type, third: thirdCard.type) &&
-                   attributesAreASet(first: firstCard.number , second: secondCard.number, third: thirdCard.number) &&
-                   attributesAreASet(first: firstCard.color , second: secondCard.color, third: thirdCard.color) &&
-                    attributesAreASet(first: firstCard.shade , second: secondCard.shade, third: thirdCard.shade) {
-                    
+                if cardsAreASet(first: firstCard, second: secondCard, third: thirdCard) {
                     // Found a Match
-                    cardsOnField[indexOfFirstCard].isMatched = true
-                    cardsOnField[indexOfSecondCard].isMatched = true
-                    cardsOnField[indexOfThirdCard].isMatched = true
+                    cardsOnField[indexOfFirstCard].matchState = .match
+                    cardsOnField[indexOfSecondCard].matchState = .match
+                    cardsOnField[indexOfThirdCard].matchState = .match
                     
                 } else {
-                    cardsOnField[indexOfFirstCard].isMatched = false
-                    cardsOnField[indexOfSecondCard].isMatched = false
-                    cardsOnField[indexOfThirdCard].isMatched = false
+                    // A Mismatch
+                    cardsOnField[indexOfFirstCard].matchState = .mismatch
+                    cardsOnField[indexOfSecondCard].matchState = .mismatch
+                    cardsOnField[indexOfThirdCard].matchState = .mismatch
                 }
             }
             
         }
     }
     
-    func attributesAreASet<T>(first: T, second: T, third: T) -> Bool where T : Equatable  {
+    private func cardsAreASet(first: SetCard, second: SetCard, third: SetCard) -> Bool {
+        return self.cheat || attributesAreASet(first: first.type , second: second.type, third: third.type) &&
+        attributesAreASet(first: first.number , second: second.number, third: third.number) &&
+        attributesAreASet(first: first.color , second: second.color, third: third.color) &&
+        attributesAreASet(first: first.shade , second: second.shade, third: third.shade)
+    }
+    
+    private func attributesAreASet<T>(first: T, second: T, third: T) -> Bool where T : Equatable  {
         return first == second && second == third
             || first != second && second != third && first != third
+    }
+    
+    mutating func drawCards() {
+        if !carddeck.isEmpty {
+            for _ in 1...3 {
+                cardsOnField.append(carddeck.remove(at: 0))
+            }
+        }
     }
     
     struct Card<Type, Number, Shading, Color>: Identifiable {
@@ -159,17 +143,25 @@ struct SetGame<Type, Number, Shading, Color> where
         var id = UUID.init()
         
         var isSelected: Bool = false
-        var isMatched: Bool? = nil
+        var matchState: MatchState = .none
         
         var type: Type
         var number: Number
         var shade: Shading
         var color: Color
         
+        var isPartOfAMatch: Bool {
+            matchState == .match
+        }
+        
+        var isPartOfAMismatch: Bool {
+            matchState == .mismatch
+        }
+        
         enum MatchState {
-            case matched
+            case match
             case mismatch
-            case unmatched
+            case none
         }
     }
 
