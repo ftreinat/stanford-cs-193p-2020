@@ -35,6 +35,8 @@ class ShapeSetGame : ObservableObject {
         game.carddeck.isEmpty
     }
     
+    //MARK: Intents
+    
     func select(card: SetGameCard) {
         game.select(card: card)
     }

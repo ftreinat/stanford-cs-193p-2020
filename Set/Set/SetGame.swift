@@ -58,33 +58,7 @@ struct SetGame<Type, Number, Shading, Color> where
             
             // wenn zu Beginn 3 Karten selektiert waren -> 4. selektiert
             if numberOfSelectedCards == 3 {
-                
-                let indicesOfSelectedCards = cardsOnField.indices.filter { (index) in  cardsOnField[index].isSelected }
-                let indexOfFirstCard = indicesOfSelectedCards[0]
-                let indexOfSecondCard = indicesOfSelectedCards[1]
-                let indexOfThirdCard = indicesOfSelectedCards[2]
-
-                if selectedCardsAreASet {
-                //neue Karten
-                    for cardindex in [indexOfFirstCard, indexOfSecondCard, indexOfThirdCard] {
-                        if !carddeck.isEmpty {
-                            cardsOnField[cardindex] = carddeck.remove(at: 0)
-                            print("Neue Card")
-                        } else {
-                            cardsOnField.remove(at: cardindex)
-                        }
-                   }
-                } else {
-                    cardsOnField[indexOfFirstCard].isSelected = false
-                    cardsOnField[indexOfSecondCard].isSelected = false
-                    cardsOnField[indexOfThirdCard].isSelected = false
-                    
-                    cardsOnField[indexOfFirstCard].matchState = .none
-                    cardsOnField[indexOfSecondCard].matchState = .none
-                    cardsOnField[indexOfThirdCard].matchState = .none
-                    print("Falsches set reseted")
-                }
-                
+                cleanUpSet()
             }
                 
             // select the card
@@ -118,6 +92,34 @@ struct SetGame<Type, Number, Shading, Color> where
         }
     }
     
+    private mutating func cleanUpSet() {
+        let indicesOfSelectedCards = cardsOnField.indices.filter { (index) in  cardsOnField[index].isSelected }
+        let indexOfFirstCard = indicesOfSelectedCards[0]
+        let indexOfSecondCard = indicesOfSelectedCards[1]
+        let indexOfThirdCard = indicesOfSelectedCards[2]
+
+        if selectedCardsAreASet {
+        //neue Karten
+            for cardindex in [indexOfFirstCard, indexOfSecondCard, indexOfThirdCard] {
+                if !carddeck.isEmpty {
+                    cardsOnField[cardindex] = carddeck.remove(at: 0)
+                    print("Neue Card")
+                } else {
+                    cardsOnField.remove(at: cardindex)
+                }
+           }
+        } else {
+            cardsOnField[indexOfFirstCard].isSelected = false
+            cardsOnField[indexOfSecondCard].isSelected = false
+            cardsOnField[indexOfThirdCard].isSelected = false
+            
+            cardsOnField[indexOfFirstCard].matchState = .none
+            cardsOnField[indexOfSecondCard].matchState = .none
+            cardsOnField[indexOfThirdCard].matchState = .none
+            print("Falsches set reseted")
+        }
+    }
+    
     private func cardsAreASet(first: SetCard, second: SetCard, third: SetCard) -> Bool {
         return self.cheat || attributesAreASet(first: first.type , second: second.type, third: third.type) &&
         attributesAreASet(first: first.number , second: second.number, third: third.number) &&
@@ -132,8 +134,12 @@ struct SetGame<Type, Number, Shading, Color> where
     
     mutating func drawCards() {
         if !carddeck.isEmpty {
-            for _ in 1...3 {
-                cardsOnField.append(carddeck.remove(at: 0))
+            if numberOfSelectedCards == 3 && selectedCardsAreASet {
+                cleanUpSet()
+            } else {
+                for _ in 1...3 {
+                    cardsOnField.append(carddeck.remove(at: 0))
+                }
             }
         }
     }
