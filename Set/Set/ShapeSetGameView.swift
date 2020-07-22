@@ -13,15 +13,25 @@ struct ShapeSetGameView: View {
     
     var body: some View {
         VStack {
-            Grid(items: shapeSetGame.cards) { card in
+            self.cardGrid()
+//            .padding()
+            self.bottomRow()
+                .padding(.top, 3)
+        }
+    }
+        
+    func cardGrid() -> some View {
+        GeometryReader { geometry in
+            Grid(items: self.shapeSetGame.cards) { card in
                 CardView(card: card)
                     .onTapGesture {
                         self.shapeSetGame.select(card: card)
-                }
+                    }
+                .transition(AnyTransition.offset(self.calculateRandomOffset(for: geometry.size)))
             }
-            .padding()
-            self.bottomRow()
-                .padding(.top, 3)
+            .onAppear {
+                self.shapeSetGame.drawInitialCards()
+            }
         }
     }
     
@@ -42,6 +52,13 @@ struct ShapeSetGameView: View {
             }
             Spacer()
         }
+    }
+    
+    func calculateRandomOffset(for size: CGSize) -> CGSize {
+        let length = Double(sqrt(size.height*size.height + size.width*size.width))
+        let angle = Angle.degrees(Double.random(in: 0..<360))
+        
+        return CGSize(width: length*cos(angle.radians), height: length*sin(angle.radians))
     }
 }
 

@@ -43,12 +43,17 @@ class ShapeSetGame : ObservableObject {
     
     func reset() {
         game = ShapeSetGame.createSetGame()
+        game.drawInitialCards()
     }
     
     func drawCards() {
         game.drawCards()
     }
-        
+    
+    func drawInitialCards() {
+        game.drawInitialCards()
+    }
+    
     enum Color: CaseIterable {
         case green
         case red

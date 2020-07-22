@@ -44,6 +44,9 @@ struct SetGame<Type, Number, Shading, Color> where
         }
 
         carddeck.shuffle()
+    }
+    
+    mutating func drawInitialCards() {
         for index in 0..<numberOfPlayingCards {
             cardsOnField.insert(carddeck.remove(at: index), at: index)
         }
@@ -62,6 +65,10 @@ struct SetGame<Type, Number, Shading, Color> where
             }
                 
             // select the card
+            guard indexOfCard < cardsOnField.count else {
+                // Wichtig im Endgame wenn erneut auf eine Matched Card geklickt wird, diese aber im Vorfeld entfernt wird
+                return
+            }
             cardsOnField[indexOfCard].isSelected.toggle()
                         
             if numberOfSelectedCards == 3 {
@@ -100,14 +107,25 @@ struct SetGame<Type, Number, Shading, Color> where
 
         if selectedCardsAreASet {
         //neue Karten
-            for cardindex in [indexOfFirstCard, indexOfSecondCard, indexOfThirdCard] {
-                if !carddeck.isEmpty {
-                    cardsOnField[cardindex] = carddeck.remove(at: 0)
-                    print("Neue Card")
-                } else {
-                    cardsOnField.remove(at: cardindex)
+            
+            if !carddeck.isEmpty {
+                for cardindex in [indexOfFirstCard, indexOfSecondCard, indexOfThirdCard] {
+                    if !carddeck.isEmpty {
+                        cardsOnField[cardindex] = carddeck.remove(at: 0)
+                        print("Neue Card")
+                    }
                 }
-           }
+            } else {
+                let firstCard = cardsOnField[indexOfFirstCard]
+                let secondCard = cardsOnField[indexOfSecondCard]
+                let thirdCard = cardsOnField[indexOfThirdCard]
+                
+                for cardToRemove in [firstCard, secondCard, thirdCard] {
+                    if let indexOfCardToRemove = cardsOnField.firstIndex(matching: cardToRemove) {
+                       cardsOnField.remove(at: indexOfCardToRemove)
+                    }
+                }
+            }
         } else {
             cardsOnField[indexOfFirstCard].isSelected = false
             cardsOnField[indexOfSecondCard].isSelected = false
