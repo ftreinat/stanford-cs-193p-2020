@@ -112,7 +112,6 @@ struct SetGame<Type, Number, Shading, Color> where
                 for cardindex in [indexOfFirstCard, indexOfSecondCard, indexOfThirdCard] {
                     if !carddeck.isEmpty {
                         cardsOnField[cardindex] = carddeck.remove(at: 0)
-                        print("Neue Card")
                     }
                 }
             } else {
@@ -134,7 +133,6 @@ struct SetGame<Type, Number, Shading, Color> where
             cardsOnField[indexOfFirstCard].matchState = .none
             cardsOnField[indexOfSecondCard].matchState = .none
             cardsOnField[indexOfThirdCard].matchState = .none
-            print("Falsches set reseted")
         }
     }
     

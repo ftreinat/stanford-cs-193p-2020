@@ -30,9 +30,7 @@ struct CardView: View {
                 .padding(.top, outsideCardPadding)
                 .padding(.bottom, outsideCardPadding)
                 .rotation3DEffect(Angle.degrees(card.isSelected ? selectionDegree : 0), axis: (x: 1, y: 0, z: 1))
-    //        .rotation3DEffect(Angle.degrees(card.isPartOfAMatch || card.isPartOfAMismatch ? 0 : 360), axis: (x: 0, y: 1, z: 0))
                 .animation(.linear(duration: 0.35))
-    //            .transition(AnyTransition.offset(CGSize(width: -200, height: -100)))
     //            .scaleEffect(getscale(for: card))
     }
         
