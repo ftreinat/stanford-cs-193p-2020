@@ -43,7 +43,17 @@ class EmojiArtDocument : ObservableObject {
     private func fetchBackgroundImageData() {
         backgroundImage = nil
         if let url = self.emojiArt.backgroundURL {
-            
-        }
+            DispatchQueue.global(qos: .userInitiated).async {
+                if let imageData = try? Data(contentsOf: url) {
+                    DispatchQueue.main.async {
+                        if url == self.emojiArt.backgroundURL {
+                            self.backgroundImage = UIImage(data: imageData)
+                        }
+                    }
+                } else {
+                    print("Could not load image")
+                }
+            }
+         }
     }
 }
