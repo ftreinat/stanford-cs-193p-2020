@@ -12,8 +12,6 @@ struct EmojiArtDocumentView: View {
     
     @ObservedObject var document: EmojiArtDocument
     
-    var imageURL = "https://www.google.com/imgres?imgurl=https%3A%2F%2Fthumbs.dreamstime.com%2Fz%2Fcartoon-countryside-illustration-beautiful-summer-village-40763564.jpg&imgrefurl=https%3A%2F%2Fwww.dreamstime.com%2Fstock-images-cartoon-countryside-illustration-beautiful-summer-village-image40763564&tbnid=6BQkf8TaGSMQkM&vet=12ahUKEwj7vr7K7uXqAhUIgKQKHRMJC-4QMygFegUIARCsAQ..i&docid=uw1mAdqWrQWrnM&w=1300&h=944&q=countryside%20cartoon&client=safari&ved=2ahUKEwj7vr7K7uXqAhUIgKQKHRMJC-4QMygFegUIARCsAQ";
-    
     var body: some View {
 //        \.self ist ein Keypath und gibt ein Attribut eines Objektes an. Hier self
         VStack {
@@ -22,46 +20,71 @@ struct EmojiArtDocumentView: View {
                     ForEach(EmojiArtDocument.palette.map { String($0) }, id: \.self) { emoji in
                         Text(emoji)
                             .font(Font.system(size: self.defaultEmojiSize))
-                    }
-                    Button("Load Background") {
-                        self.document.setBackgroundURL(URL(string: self.imageURL))
+                            .onDrag { NSItemProvider(object: emoji as NSString) }
                     }
                 }
             }
             .padding(.horizontal)
             
-            emojiArtArea()
-            
-            //Color.white
-            //.overlay(getBackgroundImageWithCompatability())
-// Klappt leider beim alten XCode nicht -> iOS Target 13.2 unter Mojave. Umweg mittels func getBackgroundImageAsView
-//                .overlay(
-//                    Group {
-//                        if self.document.backgroundImage != nil {
-//                            Image(self.document.backgroundImage!)
-//                        }
-//                    }
-//            )
-              //  .edgesIgnoringSafeArea([.horizontal, .bottom])
+            GeometryReader { geometry in
+                ZStack {
+                    Color.white.overlay(
+                        Group {
+                            if self.document.backgroundImage != nil {
+                                Image(uiImage: self.document.backgroundImage!)
+                            }
+                        }
+                    )
+                        .edgesIgnoringSafeArea([.horizontal, .bottom])
+                        .onDrop(of: ["public.image", "public.text"], isTargeted: nil) { providers, location in
+                            var location = geometry.convert(location, from: .global)
+                            location = CGPoint(x: location.x - geometry.size.width/2, y: location.y - geometry.size.height/2)
+                            return self.drop(providers: providers, at: location)
+                        }
+                    ForEach(self.document.emojis) { emoji in
+                        Text(emoji.text)
+                            .font(self.font(for: emoji))
+                            .position(self.position(for: emoji, in: geometry.size))
+                    }
+                }
+            }
         }
     }
     
-    func emojiArtArea() -> some View {
-        Group {
-            if self.document.backgroundImage != nil {
-                Color.white.overlay(Image(uiImage: self.document.backgroundImage!))
-            } else {
-                Color.white
-            }
+    private func font(for emoji: EmojiArt.Emoji) -> Font {
+        Font.system(size: emoji.fontSize)
+    }
+    
+    private func position(for emoji: EmojiArt.Emoji, in size: CGSize) -> CGPoint {
+        CGPoint(x: emoji.location.x + size.width/2, y: emoji.location.y + size.height/2)
+    }
+    
+    private func drop(providers: [NSItemProvider], at location: CGPoint) -> Bool {
+        var found = providers.loadFirstObject(ofType: URL.self) { url in
+            self.document.setBackgroundURL(url)
         }
+        print ("Found: \(found)")
+        if !found {
+            found = providers.loadObjects(ofType: String.self) { string in
+                self.document.addEmoji(string, at: location, size: self.defaultEmojiSize)
+            }
+            print("Emojis: \(self.document.emojis)")
+        }
+        
+        return found
     }
     
     private let defaultEmojiSize: CGFloat = 40
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        var document = EmojiArtDocument()
-        return EmojiArtDocumentView(document: document)
-    }
+extension EmojiArt.Emoji {
+    var fontSize: CGFloat { CGFloat(self.size) }
+    var location: CGPoint { CGPoint(x: CGFloat(x), y: CGFloat(y)) }
 }
+
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        var document = EmojiArtDocument()
+//        return EmojiArtDocumentView(document: document)
+//    }
+//}
