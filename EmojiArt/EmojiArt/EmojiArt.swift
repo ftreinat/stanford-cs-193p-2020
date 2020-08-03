@@ -8,11 +8,13 @@
 
 import Foundation
 
+typealias Emoji = EmojiArt.Emoji
+
 struct EmojiArt: Codable {
     var backgroundURL: URL?
     var emojis = [Emoji]()
 
-    struct Emoji : Identifiable, Codable, Hashable {
+    struct Emoji : Identifiable, Codable {
         let id: Int
         let text: String
         var x: Int // offset from the center
@@ -45,5 +47,24 @@ struct EmojiArt: Codable {
     mutating func addEmoji(_ text: String, x: Int, y: Int, size: Int) {
         uniqueEmojiId += 1
         emojis.append(Emoji(text: text, x: x, y: y, size: size, id: uniqueEmojiId))
+    }
+    
+    mutating func removeEmoji(_ emoji: Emoji) {
+        if let indexToRemove = emojis.firstIndex(matching: emoji) {
+            emojis.remove(at: indexToRemove)
+        }
+    }
+}
+
+extension Emoji: Equatable {
+    static func == (lhs: Emoji, rhs: Emoji) -> Bool {
+        return lhs.id == rhs.id && lhs.text == rhs.text
+    }
+}
+
+extension Emoji: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(text)
     }
 }
