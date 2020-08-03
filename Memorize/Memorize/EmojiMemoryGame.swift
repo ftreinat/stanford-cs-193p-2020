@@ -7,22 +7,23 @@
 //
 
 import Foundation
+import UIKit
 
 class EmojiMemoryGame: ObservableObject {
     @Published private(set) var game = createMemoryGame()
     
-    private static let themes: [EmojiTheme] = [
-        EmojiTheme(name: "Food", emojis: ["🥜", "🥥", "🌯", "🥑", "🍌"], color: .green),
-        EmojiTheme(name: "Animals", emojis: ["🐌", "🦖", "🦆", "🐝", "🦋"], color: .blue),
-        EmojiTheme(name: "Sports", emojis: ["⚽️", "🏓", "🏀", "🏈", "🤾🏻‍♀️", "🏌🏻‍♂️", "🥋", "🏹"], color: .red),
-        EmojiTheme(name: "Halloween", emojis: ["🎃", "🕷", "🍎", "🍭", "👻" ], color: .orange)
+    private static let themes: [EmojiCardTheme] = [
+        EmojiCardTheme(name: "Food", emojis: ["🥜", "🥥", "🌯", "🥑", "🍌","🌽","🥞","🍕","🍝"], color: UIColor.green.rgb, numberOfCards: 9),
+        EmojiCardTheme(name: "Animals", emojis: ["🐌", "🦖", "🦆", "🐝", "🦋","🦄","🐳","🐘","🦚","🦦","🐿"], color: UIColor.blue.rgb, numberOfCards: 11),
+        EmojiCardTheme(name: "Sports", emojis: ["⚽️", "🏓", "🏀", "🏈", "🤾🏻‍♀️", "🏌🏻‍♂️", "🥋", "🏹","🥊","🎾","🧗🏻","🚴🏻‍♂️"], color: UIColor.red.rgb, numberOfCards: 12),
+        EmojiCardTheme(name: "Halloween", emojis: ["🎃", "🕷", "🍎", "🍭", "👻", "🧙🏼‍♀️"], color: UIColor.orange.rgb, numberOfCards: 6)
     ]
 
     private static var theme = chooseRandomEmojiTheme()
     
     private static func createMemoryGame() -> MemoryGame<String> {
         EmojiMemoryGame.theme = chooseRandomEmojiTheme()
-        return MemoryGame<String>(numberOfPairsOfCards: EmojiMemoryGame.theme.emojis.count) { pairIndex in
+        return MemoryGame<String>(numberOfPairsOfCards: EmojiMemoryGame.theme.numberOfCards) { pairIndex in
             return EmojiMemoryGame.theme.emojis[pairIndex]
         }
     }
@@ -32,7 +33,7 @@ class EmojiMemoryGame: ObservableObject {
         return game.cards
     }
     
-    var themecolor: ThemeColor {
+    var themecolor: UIColor {
         return EmojiMemoryGame.theme.color
     }
     
@@ -55,18 +56,28 @@ class EmojiMemoryGame: ObservableObject {
         game = EmojiMemoryGame.createMemoryGame()
     }
     
-    static func chooseRandomEmojiTheme() -> EmojiTheme {
+    static func chooseRandomEmojiTheme() -> EmojiCardTheme {
         return EmojiMemoryGame.themes.randomElement()!
     }
     
 }
 
-struct EmojiTheme {
-    var name: String
-    var emojis: [String]
-    var color: ThemeColor
-}
+struct EmojiCardTheme : Codable {
+    
+    internal init(name: String, emojis: [String], color themeColorAsRGB: UIColor.RGB, numberOfCards: Int) {
+        self.name = name
+        self.emojis = emojis
+        self.numberOfCards = numberOfCards
+        self.themeColorAsRGB = themeColorAsRGB
+    }
+    
+    let name: String
+    let emojis: [String]
+    let numberOfCards: Int
+    private let themeColorAsRGB: UIColor.RGB
 
-enum ThemeColor {
-    case green, red, blue, orange
+    var color: UIColor {
+        UIColor(themeColorAsRGB)
+    }
+    
 }

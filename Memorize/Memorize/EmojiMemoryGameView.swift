@@ -39,17 +39,8 @@ struct EmojiMemoryGameView: View {
         }
     }
     
-    func extractColorFor(themecolor: ThemeColor) -> Color {
-        switch themecolor {
-        case .green:
-            return Color.green
-        case .red:
-            return Color.red
-        case .blue:
-            return Color.blue
-        case .orange:
-            return Color.orange
-        }
+    func extractColorFor(themecolor: UIColor) -> Color {
+        Color(themecolor)
     }
 }
 
@@ -65,21 +56,33 @@ struct CardView: View {
     // TODO: Dieser Code compiliert nicht unter Mojace und Xcode 11.2.1.
     // stattdessen läuft nur der untere Code der das gleiche macht, aber nicht so schlank ist.
     
-//    @ViewBuilder
-//    private func body(for size: CGSize) -> some View {
-//        if card.isFaceUp || !card.isMatched {
-//            ZStack {
-//                Pie(startAngle: Angle.degrees(0-90), endAngle: Angle.degrees(110-90), clockwise: true)
-//                    .padding(5).opacity(0.4)
-//                Text(card.content)
-//                    .font(Font.system(size: fontSize(for: size)))
-//                   .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
-//                   .animation(card.isMatched ? Animation.linear(duration: 1).repeatForever(autoreverses: false) : .default)
-//            }
-//                .cardify(isFaceUp: card.isFaceUp)
-//                .transition(AnyTransition.scale)
-//        }
-//    }
+    @ViewBuilder
+    private func body(for size: CGSize) -> some View {
+        if card.isFaceUp || !card.isMatched {
+            ZStack {
+                Group {
+                    printData()
+                    if card.isConsumingBonusTime {
+                        Pie(startAngle: Angle.degrees(0-90), endAngle: Angle.degrees(-animatedBonusRemaining*360-90), clockwise: true)
+                            .onAppear {
+                                self.startBonusTimeAnimation()
+                            }
+                    } else {
+                        Pie(startAngle: Angle.degrees(0-90), endAngle: Angle.degrees(-card.bonusRemaining*360-90), clockwise: true)
+                    }
+                }
+                .padding(5).opacity(0.4)
+                .transition(.identity)
+                
+                Text(card.content)
+                    .font(Font.system(size: fontSize(for: size)))
+                    .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
+                    .animation(card.isMatched ? Animation.linear(duration: 1).repeatForever(autoreverses: false) : .default)
+            }
+                .cardify(isFaceUp: card.isFaceUp)
+                .transition(AnyTransition.scale)
+        }
+    }
 
     @State private var animatedBonusRemaining: Double = 0
     
@@ -96,36 +99,6 @@ struct CardView: View {
         return EmptyView()
     }
     
-    private func body(for size: CGSize) -> some View {
-        Group {
-            if card.isFaceUp || !card.isMatched {
-                ZStack {
-                    Group {
-                        printData()
-                        if card.isConsumingBonusTime {
-                            Pie(startAngle: Angle.degrees(0-90), endAngle: Angle.degrees(-animatedBonusRemaining*360-90), clockwise: true)
-                                .onAppear {
-                                    self.startBonusTimeAnimation()
-                                }
-                        } else {
-                            Pie(startAngle: Angle.degrees(0-90), endAngle: Angle.degrees(-card.bonusRemaining*360-90), clockwise: true)
-                            
-                        }
-                    }
-                        .padding(5).opacity(0.4)
-                    .transition(.identity)
-                    Text(card.content)
-                        .font(Font.system(size: fontSize(for: size)))
-                        .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
-                        .animation(card.isMatched ? Animation.linear(duration: 1).repeatForever(autoreverses: false) : .default)
-                }
-                    .cardify(isFaceUp: card.isFaceUp)
-                    
-            } else {
-                 EmptyView()
-            }
-        }.transition(AnyTransition.scale)
-    }
 
     private func fontSize(for size: CGSize) -> CGFloat {
         min(size.width, size.height) * fontScaleFactor
