@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		232246DB24D84AFD005BC5C2 /* Spinning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232246DA24D84AFD005BC5C2 /* Spinning.swift */; };
 		232A160224D055DB0009CC5C /* OptionalImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232A160124D055DB0009CC5C /* OptionalImage.swift */; };
 		232A160424D059E20009CC5C /* AnimatableSystemFontModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232A160324D059E20009CC5C /* AnimatableSystemFontModifier.swift */; };
 		23B7C4D624C9BAC500A91BF2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B7C4D524C9BAC500A91BF2 /* AppDelegate.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		232246DA24D84AFD005BC5C2 /* Spinning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spinning.swift; sourceTree = "<group>"; };
 		232A160124D055DB0009CC5C /* OptionalImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalImage.swift; sourceTree = SOURCE_ROOT; };
 		232A160324D059E20009CC5C /* AnimatableSystemFontModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatableSystemFontModifier.swift; sourceTree = "<group>"; };
 		23B7C4D224C9BAC500A91BF2 /* EmojiArt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmojiArt.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,6 +70,7 @@
 			children = (
 				23B7C4E924C9BB0700A91BF2 /* EmojiArtDocument.swift */,
 				23B7C4D924C9BAC500A91BF2 /* EmojiArtDocumentView.swift */,
+				232246DA24D84AFD005BC5C2 /* Spinning.swift */,
 				23B7C4EB24C9C15700A91BF2 /* EmojiArt.swift */,
 				232A160124D055DB0009CC5C /* OptionalImage.swift */,
 				232A160324D059E20009CC5C /* AnimatableSystemFontModifier.swift */,
@@ -167,6 +170,7 @@
 				23B7C4EC24C9C15700A91BF2 /* EmojiArt.swift in Sources */,
 				23B7C4DA24C9BAC500A91BF2 /* EmojiArtDocumentView.swift in Sources */,
 				232A160224D055DB0009CC5C /* OptionalImage.swift in Sources */,
+				232246DB24D84AFD005BC5C2 /* Spinning.swift in Sources */,
 				232A160424D059E20009CC5C /* AnimatableSystemFontModifier.swift in Sources */,
 				23B7C4EA24C9BB0700A91BF2 /* EmojiArtDocument.swift in Sources */,
 			);

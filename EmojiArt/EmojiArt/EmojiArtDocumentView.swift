@@ -35,9 +35,14 @@ struct EmojiArtDocumentView: View {
                             .scaleEffect(self.zoomScale)
                             .offset(self.panOffset)
                     )
-                   ForEach(self.document.emojis) { emoji in
-                        self.body(for: emoji, in: geometry.size)
-                            .transition(.move(edge: .top))
+                    
+                    if self.isLoading {
+                        Image(systemName: "hourglass").imageScale(.large).spinning()
+                    } else {
+                        ForEach(self.document.emojis) { emoji in
+                            self.body(for: emoji, in: geometry.size)
+                                .transition(.move(edge: .top))
+                        }
                     }
                 }
                 .clipped()
@@ -45,6 +50,9 @@ struct EmojiArtDocumentView: View {
                 .gesture(self.zoomGesture())
                 .gesture(self.doubleTapToZoom(in: geometry.size).exclusively(before: self.singleTapToDeselect()))
                 .edgesIgnoringSafeArea([.horizontal, .bottom])
+                .onReceive(self.document.$backgroundImage) { image in
+                    self.zoomToFit(image, in: geometry.size)
+                }
                 .onDrop(of: ["public.image", "public.text"], isTargeted: nil) { providers, location in
                     // Global coordinatesystem in local (inside the ZStack
                     var location = geometry.convert(location, from: .global)
@@ -71,6 +79,10 @@ struct EmojiArtDocumentView: View {
             .offset(self.isEmojiSelected(emoji) ? emojiMovementOffset : .zero)
             .gesture(self.selectGesture(for: emoji))
             .gesture(self.longPressToDelete(for: emoji).simultaneously(with: self.moveGesture(for: emoji, in: size)))
+    }
+    
+    var isLoading: Bool {
+        document.backgroundURL != nil && document.backgroundImage == nil 
     }
     
     private func rotation(for emoji: Emoji) -> Angle {
@@ -219,7 +231,7 @@ struct EmojiArtDocumentView: View {
     
     private func drop(providers: [NSItemProvider], at location: CGPoint) -> Bool {
         var found = providers.loadFirstObject(ofType: URL.self) { url in
-            self.document.setBackgroundURL(url)
+            self.document.backgroundURL = url
         }
         if !found {
             found = providers.loadObjects(ofType: String.self) { string in
