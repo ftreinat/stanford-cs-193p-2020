@@ -26,8 +26,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         cards = Array()
         var randomizer = SystemRandomNumberGenerator()
         
-        let numberOfPairsOfCardsShuffeld = Int.random(in: 3..<numberOfPairsOfCards, using: &randomizer)
-        for pairIndex in 0..<numberOfPairsOfCardsShuffeld {
+        for pairIndex in 0..<numberOfPairsOfCards {
             let content = cardContentFactory(pairIndex)
             cards.append(Card(id: pairIndex*2, content: content))
             cards.append(Card(id: pairIndex*2+1, content: content))

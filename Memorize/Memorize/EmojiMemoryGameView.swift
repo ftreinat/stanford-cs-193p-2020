@@ -23,6 +23,7 @@ struct EmojiMemoryGameView: View {
             }
                 .padding()
                 .foregroundColor(extractColorFor(themecolor: self.viewModel.themecolor))
+             .onAppear(perform: { () -> Void in self.printTheme() })
             HStack(alignment: VerticalAlignment.bottom) {
                 Text("Theme: \(self.viewModel.themename)")
                 Spacer()
@@ -32,7 +33,6 @@ struct EmojiMemoryGameView: View {
                 withAnimation(.easeInOut) {
                 self.viewModel.startNewGame()
                 }
-
             }
                 .buttonStyle(DefaultButtonStyle())
                 .padding()
@@ -41,6 +41,10 @@ struct EmojiMemoryGameView: View {
     
     func extractColorFor(themecolor: UIColor) -> Color {
         Color(themecolor)
+    }
+    
+    func printTheme() {
+        print(self.viewModel.themeAsJSON)
     }
 }
 
@@ -52,16 +56,13 @@ struct CardView: View {
             self.body(for: geometry.size)
         }
     }
-  
-    // TODO: Dieser Code compiliert nicht unter Mojace und Xcode 11.2.1.
-    // stattdessen läuft nur der untere Code der das gleiche macht, aber nicht so schlank ist.
     
     @ViewBuilder
     private func body(for size: CGSize) -> some View {
         if card.isFaceUp || !card.isMatched {
             ZStack {
                 Group {
-                    printData()
+//                    printData()
                     if card.isConsumingBonusTime {
                         Pie(startAngle: Angle.degrees(0-90), endAngle: Angle.degrees(-animatedBonusRemaining*360-90), clockwise: true)
                             .onAppear {
@@ -98,7 +99,6 @@ struct CardView: View {
         print("card \(card) mit AnimatedBonus: \(animatedBonusRemaining) und bonusRemaining \(card.bonusRemaining)")
         return EmptyView()
     }
-    
 
     private func fontSize(for size: CGSize) -> CGFloat {
         min(size.width, size.height) * fontScaleFactor

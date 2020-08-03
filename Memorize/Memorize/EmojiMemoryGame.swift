@@ -41,6 +41,10 @@ class EmojiMemoryGame: ObservableObject {
         return EmojiMemoryGame.theme.name
     }
     
+    var themeAsJSON: String {
+        return EmojiMemoryGame.theme.json ?? "Kein Theme vorhanden"
+    }
+    
     var points: Int {
         return game.score
     }
@@ -54,6 +58,7 @@ class EmojiMemoryGame: ObservableObject {
     
     func startNewGame() {
         game = EmojiMemoryGame.createMemoryGame()
+        print(EmojiMemoryGame.theme.json ?? "Kein Theme vorhanden")
     }
     
     static func chooseRandomEmojiTheme() -> EmojiCardTheme {
@@ -78,6 +83,19 @@ struct EmojiCardTheme : Codable {
 
     var color: UIColor {
         UIColor(themeColorAsRGB)
+    }
+    
+    var json: String? {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        
+        let json = try? encoder.encode(self)
+        if let jsonData = json {
+           return String(data: jsonData, encoding: .utf8)
+        } else {
+            return nil
+        }
+        
     }
     
 }
