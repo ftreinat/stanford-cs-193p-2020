@@ -9,22 +9,24 @@
 import SwiftUI
 import Combine
 
-class EmojiArtDocument : ObservableObject {
+class EmojiArtDocument : ObservableObject, Hashable, Identifiable {
         
+    let id: UUID
+    
     static let palette: String = "🏈🏄‍♂️🚴‍♂️🥌🛁🦋"
     
     @Published private var emojiArt: EmojiArt = EmojiArt()
 
     @Published private(set) var backgroundImage: UIImage?
 
-    private static let untitled = "EmojiArtDocument.Untitled"
-    
     private var autosaveCancellable: AnyCancellable?
     
-    init() {
-        emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey: EmojiArtDocument.untitled)) ?? EmojiArt()
+    init(id: UUID? = nil) {
+        self.id = id ?? UUID() // makes a init possible with no arguments, nil, and an uuid
+        let defaultsKey = "EmojiArtDocument.\(self.id.uuidString)"
+        emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey: defaultsKey)) ?? EmojiArt()
         autosaveCancellable = $emojiArt.sink { emojiArt in
-            UserDefaults.standard.set(emojiArt.json, forKey: EmojiArtDocument.untitled)
+            UserDefaults.standard.set(emojiArt.json, forKey: defaultsKey)
         }
         fetchBackgroundImageData()
     }
@@ -82,4 +84,16 @@ class EmojiArtDocument : ObservableObject {
             //Ergebnis vom Publisher direkt in das Property vom Objekt schreiben mittels assign
         }
     }
+    
+    @Published var steadyStateZoomScale: CGFloat = 1.0
+    @Published var steadyStatePanOffset: CGSize = .zero
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+    static func == (lhs: EmojiArtDocument, rhs: EmojiArtDocument) -> Bool {
+        lhs.id == rhs.id
+    }
+
 }

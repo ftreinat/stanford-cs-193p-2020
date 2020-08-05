@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "23B7C4D124C9BAC500A91BF2"
-               BuildableName = "EmojiArt.app"
+               BuildableName = "Emoji Art.app"
                BlueprintName = "EmojiArt"
                ReferencedContainer = "container:EmojiArt.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "23B7C4D124C9BAC500A91BF2"
-            BuildableName = "EmojiArt.app"
+            BuildableName = "Emoji Art.app"
             BlueprintName = "EmojiArt"
             ReferencedContainer = "container:EmojiArt.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "23B7C4D124C9BAC500A91BF2"
-            BuildableName = "EmojiArt.app"
+            BuildableName = "Emoji Art.app"
             BlueprintName = "EmojiArt"
             ReferencedContainer = "container:EmojiArt.xcodeproj">
          </BuildableReference>
