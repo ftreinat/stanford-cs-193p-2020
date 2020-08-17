@@ -30,8 +30,8 @@ struct PaletteChooser: View {
                     self.showPaletteEditor = true
                 }
 // Alternatives ways for displaying the modal dialog
-//            .sheet(isPresented: $showPaletteEditor) {
-            .popover(isPresented: $showPaletteEditor) {
+            .sheet(isPresented: $showPaletteEditor) {
+//            .popover(isPresented: $showPaletteEditor) {
                 PaletteEditor(chosenPalette: self.$chosenPalette, isShowing: self.$showPaletteEditor)
                         .frame(minWidth: 300, minHeight: 500)
                         .environmentObject(self.document)

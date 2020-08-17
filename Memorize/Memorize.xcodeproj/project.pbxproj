@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		230DD0FA24E7E5C800783F3E /* EmojiThemeFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230DD0F924E7E5C800783F3E /* EmojiThemeFactory.swift */; };
 		230DF15E24978A1E00A44914 /* Pie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230DF15D24978A1E00A44914 /* Pie.swift */; };
 		230DF1602497B47000A44914 /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230DF15F2497B47000A44914 /* Cardify.swift */; };
 		231AF478248E5091003D9F74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231AF477248E5091003D9F74 /* AppDelegate.swift */; };
@@ -23,9 +24,14 @@
 		2342DC2224939F1800624A99 /* GridLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2342DC2124939F1800624A99 /* GridLayout.swift */; };
 		2342DC242493A59900624A99 /* Array+Identifable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2342DC232493A59900624A99 /* Array+Identifable.swift */; };
 		2342DC262494F54000624A99 /* Array+Only.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2342DC252494F54000624A99 /* Array+Only.swift */; };
+		237C900F24DC283000F71904 /* MemorizeThemeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237C900E24DC283000F71904 /* MemorizeThemeStore.swift */; };
+		237C901124DD72E900F71904 /* MemorizeThemeChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237C901024DD72E900F71904 /* MemorizeThemeChooserView.swift */; };
+		23E5FB5924E2CC9C005B1F78 /* EmojiCardThemeEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E5FB5824E2CC9C005B1F78 /* EmojiCardThemeEditor.swift */; };
+		23E5FB5B24E40554005B1F78 /* EditableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E5FB5A24E40554005B1F78 /* EditableText.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		230DD0F924E7E5C800783F3E /* EmojiThemeFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiThemeFactory.swift; sourceTree = "<group>"; };
 		230DF15D24978A1E00A44914 /* Pie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pie.swift; sourceTree = "<group>"; };
 		230DF15F2497B47000A44914 /* Cardify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = "<group>"; };
 		231AF474248E5091003D9F74 /* Memorize.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Memorize.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,6 +50,10 @@
 		2342DC2124939F1800624A99 /* GridLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLayout.swift; sourceTree = "<group>"; };
 		2342DC232493A59900624A99 /* Array+Identifable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Identifable.swift"; sourceTree = "<group>"; };
 		2342DC252494F54000624A99 /* Array+Only.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Only.swift"; sourceTree = "<group>"; };
+		237C900E24DC283000F71904 /* MemorizeThemeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorizeThemeStore.swift; sourceTree = "<group>"; };
+		237C901024DD72E900F71904 /* MemorizeThemeChooserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorizeThemeChooserView.swift; sourceTree = "<group>"; };
+		23E5FB5824E2CC9C005B1F78 /* EmojiCardThemeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCardThemeEditor.swift; sourceTree = SOURCE_ROOT; };
+		23E5FB5A24E40554005B1F78 /* EditableText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditableText.swift; path = ../../EmojiArt/EmojiArt/EditableText.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,16 +86,21 @@
 		231AF476248E5091003D9F74 /* Memorize */ = {
 			isa = PBXGroup;
 			children = (
-				231AF47B248E5091003D9F74 /* EmojiMemoryGameView.swift */,
 				230DF15F2497B47000A44914 /* Cardify.swift */,
 				230DF15D24978A1E00A44914 /* Pie.swift */,
+				23E5FB5824E2CC9C005B1F78 /* EmojiCardThemeEditor.swift */,
+				231AF47B248E5091003D9F74 /* EmojiMemoryGameView.swift */,
 				231AF48D248FB82E003D9F74 /* EmojiMemoryGame.swift */,
 				231AF48B248FB5D1003D9F74 /* MemoryGame.swift */,
 				2327DB3B24D7EE92008110B4 /* UIColor+RGB.swift */,
 				2342DC232493A59900624A99 /* Array+Identifable.swift */,
 				2342DC252494F54000624A99 /* Array+Only.swift */,
 				2327DB3D24D7EF32008110B4 /* Color+RGB.swift */,
+				23E5FB5A24E40554005B1F78 /* EditableText.swift */,
 				2342DC1F2493978E00624A99 /* Grid.swift */,
+				237C900E24DC283000F71904 /* MemorizeThemeStore.swift */,
+				237C901024DD72E900F71904 /* MemorizeThemeChooserView.swift */,
+				230DD0F924E7E5C800783F3E /* EmojiThemeFactory.swift */,
 				2342DC2124939F1800624A99 /* GridLayout.swift */,
 				231AF477248E5091003D9F74 /* AppDelegate.swift */,
 				231AF479248E5091003D9F74 /* SceneDelegate.swift */,
@@ -183,12 +198,17 @@
 				231AF48C248FB5D1003D9F74 /* MemoryGame.swift in Sources */,
 				2342DC262494F54000624A99 /* Array+Only.swift in Sources */,
 				2342DC242493A59900624A99 /* Array+Identifable.swift in Sources */,
+				230DD0FA24E7E5C800783F3E /* EmojiThemeFactory.swift in Sources */,
 				2327DB3C24D7EE92008110B4 /* UIColor+RGB.swift in Sources */,
 				231AF47C248E5091003D9F74 /* EmojiMemoryGameView.swift in Sources */,
+				237C900F24DC283000F71904 /* MemorizeThemeStore.swift in Sources */,
 				231AF48E248FB82E003D9F74 /* EmojiMemoryGame.swift in Sources */,
 				2327DB3E24D7EF32008110B4 /* Color+RGB.swift in Sources */,
+				23E5FB5B24E40554005B1F78 /* EditableText.swift in Sources */,
 				2342DC2224939F1800624A99 /* GridLayout.swift in Sources */,
+				23E5FB5924E2CC9C005B1F78 /* EmojiCardThemeEditor.swift in Sources */,
 				2342DC202493978E00624A99 /* Grid.swift in Sources */,
+				237C901124DD72E900F71904 /* MemorizeThemeChooserView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +258,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -298,6 +319,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -326,8 +348,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Memorize/Preview Content\"";
+				DEVELOPMENT_TEAM = SN4AGV2P4C;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Memorize/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -345,8 +369,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Memorize/Preview Content\"";
+				DEVELOPMENT_TEAM = SN4AGV2P4C;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Memorize/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -10,21 +10,18 @@ import Foundation
 import UIKit
 
 class EmojiMemoryGame: ObservableObject {
-    @Published private(set) var game = createMemoryGame()
+    @Published private(set) var game: MemoryGame<String>
     
-    private static let themes: [EmojiCardTheme] = [
-        EmojiCardTheme(name: "Food", emojis: ["🥜", "🥥", "🌯", "🥑", "🍌","🌽","🥞","🍕","🍝"], color: UIColor.green.rgb, numberOfCards: 9),
-        EmojiCardTheme(name: "Animals", emojis: ["🐌", "🦖", "🦆", "🐝", "🦋","🦄","🐳","🐘","🦚","🦦","🐿"], color: UIColor.blue.rgb, numberOfCards: 11),
-        EmojiCardTheme(name: "Sports", emojis: ["⚽️", "🏓", "🏀", "🏈", "🤾🏻‍♀️", "🏌🏻‍♂️", "🥋", "🏹","🥊","🎾","🧗🏻","🚴🏻‍♂️"], color: UIColor.red.rgb, numberOfCards: 12),
-        EmojiCardTheme(name: "Halloween", emojis: ["🎃", "🕷", "🍎", "🍭", "👻", "🧙🏼‍♀️"], color: UIColor.orange.rgb, numberOfCards: 6)
-    ]
-
-    private static var theme = chooseRandomEmojiTheme()
+    var theme: EmojiCardTheme
     
-    private static func createMemoryGame() -> MemoryGame<String> {
-        EmojiMemoryGame.theme = chooseRandomEmojiTheme()
-        return MemoryGame<String>(numberOfPairsOfCards: EmojiMemoryGame.theme.numberOfCards) { pairIndex in
-            return EmojiMemoryGame.theme.emojis[pairIndex]
+    init(theme: EmojiCardTheme) {
+        self.theme = theme
+        self.game = EmojiMemoryGame.createMemoryGame(for: theme)
+    }
+    
+    private static func createMemoryGame(for theme: EmojiCardTheme) -> MemoryGame<String> {
+        return MemoryGame<String>(numberOfPairsOfCards: theme.numberOfPairs) { pairIndex in
+            return theme.emojis[pairIndex]
         }
     }
     
@@ -34,15 +31,15 @@ class EmojiMemoryGame: ObservableObject {
     }
     
     var themecolor: UIColor {
-        return EmojiMemoryGame.theme.color
+        return theme.color
     }
     
     var themename: String {
-        return EmojiMemoryGame.theme.name
+        return theme.name
     }
     
     var themeAsJSON: String {
-        return EmojiMemoryGame.theme.json ?? "Kein Theme vorhanden"
+        return theme.json ?? "Kein Theme vorhanden"
     }
     
     var points: Int {
@@ -57,32 +54,60 @@ class EmojiMemoryGame: ObservableObject {
     }
     
     func startNewGame() {
-        game = EmojiMemoryGame.createMemoryGame()
-        print(EmojiMemoryGame.theme.json ?? "Kein Theme vorhanden")
+        game = EmojiMemoryGame.createMemoryGame(for: theme)
+        print(theme.json ?? "Kein Theme vorhanden")
     }
     
     static func chooseRandomEmojiTheme() -> EmojiCardTheme {
-        return EmojiMemoryGame.themes.randomElement()!
+        return EmojiThemeFactory.getRandomTheme()
     }
     
 }
 
-struct EmojiCardTheme : Codable {
+struct EmojiCardTheme : Codable, Identifiable {
     
     internal init(name: String, emojis: [String], color themeColorAsRGB: UIColor.RGB, numberOfCards: Int) {
         self.name = name
-        self.emojis = emojis
-        self.numberOfCards = numberOfCards
+        self._emojis = emojis
+        self._numberOfPairs = numberOfCards
         self.themeColorAsRGB = themeColorAsRGB
     }
+        
+    let id = UUID()
+    var name: String
+    private var _emojis: [String]
+    var emojis: [String] {
+        get {
+            _emojis
+        }
+        set {
+            if newValue.count > 1 {
+                _emojis = newValue
+            }
+        }
+    }
+    private var _numberOfPairs: Int
+    var numberOfPairs: Int
+    {
+        get {
+            _numberOfPairs > emojis.count ? emojis.count : _numberOfPairs
+        }
+        set(newValue) {
+            if newValue <= emojis.count, newValue > 1 {
+                _numberOfPairs = newValue
+            }
+        }
+    }
     
-    let name: String
-    let emojis: [String]
-    let numberOfCards: Int
-    private let themeColorAsRGB: UIColor.RGB
+    private var themeColorAsRGB: UIColor.RGB
 
     var color: UIColor {
-        UIColor(themeColorAsRGB)
+        get {
+            UIColor(themeColorAsRGB)
+        }
+        set {
+            themeColorAsRGB = newValue.rgb
+        }
     }
     
     var json: String? {
@@ -95,7 +120,6 @@ struct EmojiCardTheme : Codable {
         } else {
             return nil
         }
-        
     }
     
 }

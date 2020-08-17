@@ -13,7 +13,7 @@ struct EmojiMemoryGameView: View {
     
     var body: some View {
         VStack() {
-             Grid(items: viewModel.cards) { card in
+             Grid(viewModel.cards) { card in
                 CardView(card: card).onTapGesture {
                     withAnimation(.linear(duration: 0.75)) {
                         self.viewModel.choose(card: card)
@@ -22,13 +22,11 @@ struct EmojiMemoryGameView: View {
                 .padding(5)
             }
                 .padding()
-                .foregroundColor(extractColorFor(themecolor: self.viewModel.themecolor))
-             .onAppear(perform: { () -> Void in self.printTheme() })
-            HStack(alignment: VerticalAlignment.bottom) {
-                Text("Theme: \(self.viewModel.themename)")
-                Spacer()
-                Text("Points: \(viewModel.points)")
-            }.padding()
+                .foregroundColor(extractColor())
+                .onAppear(perform: { () -> Void in self.printTheme() })
+            
+            self.viewForThemenameAndPoints()
+                
             Button("Start Game") {
                 withAnimation(.easeInOut) {
                 self.viewModel.startNewGame()
@@ -39,12 +37,37 @@ struct EmojiMemoryGameView: View {
         }
     }
     
-    func extractColorFor(themecolor: UIColor) -> Color {
-        Color(themecolor)
+    func extractColor() -> Color {
+        Color(self.viewModel.themecolor)
     }
     
     func printTheme() {
         print(self.viewModel.themeAsJSON)
+    }
+    
+    private func viewForThemenameAndPoints() -> some View {
+        HStack {
+            VStack (alignment: .leading) {
+                HStack {
+                    Text("Theme: ")
+                        .font(.headline)
+                        .bold()
+                    Text("\(self.viewModel.themename)")
+                        .foregroundColor(self.extractColor())
+                }
+                HStack {
+                    Text("Points:")
+                        .font(.headline)
+                        .bold()
+                    Text("\(viewModel.points)")
+                        .frame(minWidth: 50.0)
+                }
+            }
+            .frame(alignment: .leading)
+            .padding()
+            
+            Spacer()
+        }
     }
 }
 
@@ -112,8 +135,11 @@ struct CardView: View {
 // erst relevant unter MacOS Catalina
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let game = EmojiMemoryGame()
-        game.choose(card: game.cards[0])
-        return EmojiMemoryGameView(viewModel: game)
+        Group {
+            EmojiMemoryGameView(viewModel: EmojiMemoryGame(theme: EmojiThemeFactory.themes[0]))
+            EmojiMemoryGameView(viewModel: EmojiMemoryGame(theme: EmojiThemeFactory.themes[3]))
+                .environment(\.locale, Locale(identifier: "ar"))
+        }
     }
 }
+
