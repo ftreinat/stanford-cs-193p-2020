@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2311FDD025026A2000B4F3D8 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2311FDCF25026A2000B4F3D8 /* MapView.swift */; };
 		237D9D5D24F130D2000D68B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237D9D5C24F130D2000D68B4 /* AppDelegate.swift */; };
 		237D9D5F24F130D2000D68B4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237D9D5E24F130D2000D68B4 /* SceneDelegate.swift */; };
 		237D9D6224F130D2000D68B4 /* Enroute.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 237D9D6024F130D2000D68B4 /* Enroute.xcdatamodeld */; };
@@ -31,6 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2311FDCF25026A2000B4F3D8 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		237D9D5924F130D2000D68B4 /* Enroute.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Enroute.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		237D9D5C24F130D2000D68B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		237D9D5E24F130D2000D68B4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 				237D9D9224F2933B000D68B4 /* Flight.swift */,
 				237D9D7424F1312E000D68B4 /* Airlines.swift */,
 				237D9D7B24F13146000D68B4 /* FilterFlights.swift */,
+				2311FDCF25026A2000B4F3D8 /* MapView.swift */,
 				237D9D7724F13145000D68B4 /* FlightFetcher.swift */,
 				237D9D7924F13145000D68B4 /* FlightsEnrouteView.swift */,
 				237D9D7824F13145000D68B4 /* FoundationExtensions.swift */,
@@ -214,6 +217,7 @@
 				237D9D7D24F13146000D68B4 /* FoundationExtensions.swift in Sources */,
 				237D9D7524F1312E000D68B4 /* Airports.swift in Sources */,
 				237D9D8B24F13356000D68B4 /* FlightAwareRequest.swift in Sources */,
+				2311FDD025026A2000B4F3D8 /* MapView.swift in Sources */,
 				237D9D7E24F13146000D68B4 /* FlightsEnrouteView.swift in Sources */,
 				237D9D5F24F130D2000D68B4 /* SceneDelegate.swift in Sources */,
 				237D9D8D24F13356000D68B4 /* FlightAware+Enroute.swift in Sources */,

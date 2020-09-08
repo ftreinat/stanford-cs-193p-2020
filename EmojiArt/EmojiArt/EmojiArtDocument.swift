@@ -90,7 +90,7 @@ class EmojiArtDocument : ObservableObject, Hashable, Identifiable {
     
     private func fetchBackgroundImageData() {
         backgroundImage = nil
-        if let url = self.emojiArt.backgroundURL {
+        if let url = self.emojiArt.backgroundURL?.imageURL {
             //alten möglicherweise noch laufenden Request canceln
             fetchedImageCancellable?.cancel()
             
